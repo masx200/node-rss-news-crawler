@@ -2,6 +2,7 @@
 
 使用 javascript 写的 nodejs 爬虫,从 rss 订阅上下载 xml,转换成 json,然后提取里面的每一个订阅项目的 url,并爬取正文内容和图片的网址
 
+使用'fetch'模块向服务器请求数据,使用"fast-xml-parser"模块把xml转换成json,使用"cheerio"模块,提取网页中的内容
 
 使用的模块如下
 
