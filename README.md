@@ -2,6 +2,20 @@
 
 使用 javascript 写的 nodejs 爬虫,从 rss 订阅上下载 xml,转换成 json,然后提取里面的每一个订阅项目的 url,并爬取正文内容和图片的网址
 
+
+使用的模块如下
+
+```javascript
+
+const fs = require("fs");
+const path = require("path");
+const fastxmlparser = require("fast-xml-parser");
+const cheerio = require("cheerio");
+const fetch = require("fetch");
+```
+
+爬取的结果如下
+
 ```json
 {
   "title": "Python 3.7 上架 Win10 应用商店，可简单一键安装运行开发环境了 - 异次元软件下载",
