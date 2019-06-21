@@ -1,20 +1,28 @@
 {
-    "dependencies": {
-        "cheerio": "^1.0.0-rc.3",
-        "encoding": "^0.1.12",
-        "fast-xml-parser": "^3.12.16",
-        "fetch": "^1.1.0",
-        "iconv-lite": "^0.4.24",
-        "nodemon": "^1.19.1"
-    },
-    "name": "nodejs_pachong_test",
-    "version": "1.0.0",
-    "main": "index.js",
-    "devDependencies": {},
-    "scripts": {
-        "start": "node ."
-    },
-    "author": "",
-    "license": "ISC",
-    "description": ""
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "encoding": "^0.1.12",
+    "fast-xml-parser": "^3.12.16",
+    "fetch": "^1.1.0",
+    "iconv-lite": "^0.4.24",
+    "nodemon": "^1.19.1"
+  },
+  "name": "nodejs_pachong_test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node ."
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "使用javascript写的nodejs爬虫,从rss订阅上下载xml,转换成json,然后提取里面的每一个订阅项目的url,并爬取正文内容和图片的网址",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/masx200/nodejs_pachong_test.git"
+  },
+  "bugs": {
+    "url": "https://github.com/masx200/nodejs_pachong_test/issues"
+  },
+  "homepage": "https://github.com/masx200/nodejs_pachong_test#readme"
 }
