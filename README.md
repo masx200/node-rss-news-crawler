@@ -1,0 +1,2 @@
+# nodejs_pachong_test
+使用javascript写的nodejs爬虫,从rss订阅上下载xml,转换成json,然后提取里面的每一个订阅项目的url,并爬取正文内容和图片的网址
