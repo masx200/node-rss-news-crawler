@@ -1,0 +1,20 @@
+{
+    "dependencies": {
+        "cheerio": "^1.0.0-rc.3",
+        "encoding": "^0.1.12",
+        "fast-xml-parser": "^3.12.16",
+        "fetch": "^1.1.0",
+        "iconv-lite": "^0.4.24",
+        "nodemon": "^1.19.1"
+    },
+    "name": "nodejs_pachong_test",
+    "version": "1.0.0",
+    "main": "index.js",
+    "devDependencies": {},
+    "scripts": {
+        "start": "node ."
+    },
+    "author": "",
+    "license": "ISC",
+    "description": ""
+}
