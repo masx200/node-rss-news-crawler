@@ -1,3 +1,7 @@
+"use strict";
+process.on("unhandledRejection", err => {
+  throw err;
+});
 const filecreatetime = new Date().toString();
 const fastxmlparser = require("fast-xml-parser");
 const cheerio = require("cheerio");
