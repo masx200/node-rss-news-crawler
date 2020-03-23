@@ -1,5 +1,10 @@
 {
   "dependencies": {
+
+
+
+
+"node-fetch":"2.6.0",
 "set-value":"^2.0.1",
 "minimist":"1.2.2",
     "cheerio": "^1.0.0-rc.3",
