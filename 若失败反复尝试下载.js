@@ -1,5 +1,6 @@
+const urloptions = require("./urloptions").default;
 const { sleeptiemout } = require("./sleeptiemout");
-const { fetch,  } = require("./index");
+const { fetch } = require("./index");
 /**
  * @param {string} url
  */
@@ -41,8 +42,7 @@ async function 若失败反复尝试下载(url) {
             const bodytext = await response.text();
 
             responsecall(bodytext);
-        }
-        catch (e) {
+        } catch (e) {
             console.error("爬虫下载失败", url, e);
             await sleeptiemout(500 + 500 * Math.random());
 

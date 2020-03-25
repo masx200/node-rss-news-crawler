@@ -1,6 +1,7 @@
-const { navigatoruserAgent } = require("./index");
+const navigatoruserAgent = require("./navigatoruserAgent").default;
 const urloptions = {
     headers: {
-        "User-Agent": navigatoruserAgent
-    }
+        "User-Agent": navigatoruserAgent,
+    },
 };
+exports.default = urloptions;

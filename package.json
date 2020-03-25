@@ -1,11 +1,11 @@
 {
-    "dependencies": {
-        "check-types": "^11.1.2"
-    },
+    "type": "commonjs",
+    "dependencies": {},
     "name": "nodejs_pachong_test",
     "version": "1.0.0",
     "main": "index.js",
     "devDependencies": {
+        "check-types": "^11.1.2",
         "@types/node": "^12.12.31",
         "@types/node-fetch": "^2.5.5",
         "cheerio": "^1.0.0-rc.3",
@@ -19,7 +19,8 @@
         "typescript": "^3.8.3"
     },
     "scripts": {
-        "start": "node index.js"
+        "start": "node index.js",
+        "prettier": "prettier --write *.js *.md *.json"
     },
     "author": "masx200 <34191203+masx200@users.noreply.github.com>",
     "license": "ISC",

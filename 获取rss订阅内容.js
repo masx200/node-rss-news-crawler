@@ -1,9 +1,12 @@
+const urloptions = require("./urloptions").default;
 const check = require("check-types");
 const fastxmlparser = require("fast-xml-parser");
 const fs = require("fs");
 const path = require("path");
 const { formatfilepath } = require("./formatfilepath");
-const { filecreatetime, 爬虫下载解析, fetch, urloptions } = require("./index");
+const { filecreatetime, fetch } = require("./index");
+
+const 爬虫下载解析 = require("./爬虫下载解析").default;
 /**
  * @param {string} url
  * @param {string} selector
@@ -63,7 +66,7 @@ async function 获取rss订阅内容(url, selector, imglazyattr) {
                 (eleobj) => {
                     return {
                         title: eleobj.title,
-                        link: eleobj.link
+                        link: eleobj.link,
                     };
                 }
             );
@@ -75,12 +78,13 @@ async function 获取rss订阅内容(url, selector, imglazyattr) {
                     /**
                      * @param {{ link: string; }} e
                      */
-                    (e) => 爬虫下载解析(
-                        e.link,
-                        selector,
-                        imglazyattr,
-                        websitetitle
-                    )
+                    (e) =>
+                        爬虫下载解析(
+                            e.link,
+                            selector,
+                            imglazyattr,
+                            websitetitle
+                        )
                 )
             );
             rs(["爬虫完成! ", url, filelists]);

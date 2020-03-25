@@ -5,6 +5,8 @@ const { formatfilepath } = require("./formatfilepath");
 const { sleeptiemout } = require("./sleeptiemout");
 const { 若失败反复尝试下载 } = require("./若失败反复尝试下载");
 const { filecreatetime, fsPromises } = require("./index");
+
+exports.default = 爬虫下载解析;
 /**
  * @param {string} url
  * @param {string} contentselector
@@ -51,7 +53,7 @@ async function 爬虫下载解析(url, contentselector, imglazyattr, websitetitl
             url: url,
             //   meta,
             imgs,
-            content: content
+            content: content,
         };
 
         /* 判断文件目录是否存在 */
