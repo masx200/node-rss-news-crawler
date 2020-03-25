@@ -1,10 +1,11 @@
 {
-    "dependencies": {},
+    "dependencies": {
+        "check-types": "^11.1.2"
+    },
     "name": "nodejs_pachong_test",
     "version": "1.0.0",
     "main": "index.js",
     "devDependencies": {
-        "typescript": "^3.8.3",
         "@types/node": "^12.12.31",
         "@types/node-fetch": "^2.5.5",
         "cheerio": "^1.0.0-rc.3",
@@ -14,7 +15,8 @@
         "minimist": "^1.2.5",
         "node-fetch": "^2.6.0",
         "prettier": "^2.0.2",
-        "set-value": "^3.0.1"
+        "set-value": "^3.0.1",
+        "typescript": "^3.8.3"
     },
     "scripts": {
         "start": "node index.js"
