@@ -1,47 +1,49 @@
-"use strict";
+("use strict");
+const process = require("process");
+
 process.on("unhandledRejection", err => {
-  throw err;
-  //   console.error(err); //err;
+    throw err;
+    //   console.error(err); //err;
 });
 const filecreatetime = new Date().toString();
 const fastxmlparser = require("fast-xml-parser");
 const cheerio = require("cheerio");
-const fetch = require("fetch");
+const fetch = require("node-fetch");
 const fs = require("fs");
 const fsPromises = fs.promises;
 const path = require("path");
 const navigatoruserAgent =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36";
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36";
 const urloptions = {
-  headers: {
-    "User-Agent": navigatoruserAgent
-  }
+    headers: {
+        "User-Agent": navigatoruserAgent
+    }
 };
 
 const pachongurlselecarray = [
-  {
-    url: `https://www.ifanr.com/feed`,
-    selector:
-      "article.o-single-content__body__content.c-article-content.s-single-article.js-article",
-    imglazyattr: "src"
-  },
-  {
-    url: `https://www.pingwest.com/feed`,
-    selector: "article.article-style",
-    imglazyattr: "src"
-  },
-  {
-    url: `https://www.landiannews.com/feed`,
-    selector: "#scroll > section > article > div.content_post",
-    imglazyattr: "src"
-  },
+    {
+        url: `https://www.ifanr.com/feed`,
+        selector:
+            "article.o-single-content__body__content.c-article-content.s-single-article.js-article",
+        imglazyattr: "src"
+    },
+    {
+        url: `https://www.pingwest.com/feed`,
+        selector: "article.article-style",
+        imglazyattr: "src"
+    },
+    {
+        url: `https://www.landiannews.com/feed`,
+        selector: "#scroll > section > article > div.content_post",
+        imglazyattr: "src"
+    },
 
-  {
-    url: `https://www.tmtpost.com/rss`,
-    selector: "body > div.container > section > div > article",
-    imglazyattr: "src"
-  },
-  /* 
+    {
+        url: `https://www.tmtpost.com/rss`,
+        selector: "body > div.container > section > div > article",
+        imglazyattr: "src"
+    },
+    /* 
   本页面禁止访问 - 错误：403
 “ 或者你的 IP 由于访问过于频繁受限制了 ”
 错误的原因：
@@ -61,235 +63,246 @@ const pachongurlselecarray = [
 — 异次元软件世界 iPlaySoft.com
 
 关注我们的 @XForce 新浪微博。 */
-  /* {
+    /* {
     url: "https://feed.iplaysoft.com/",
     selector: " div.entry-content",
     imglazyattr: "data-src"
   }, */
-  {
-    url: "https://www.ithome.com/rss/",
-    selector: "div#paragraph.post_content",
-    imglazyattr: "data-original"
-  }
+    {
+        url: "https://www.ithome.com/rss/",
+        selector: "div#paragraph.post_content",
+        imglazyattr: "data-original"
+    }
 ];
 (async () => {
-  /* 先删除旧的json文件吧 */
-  const oldfiles = await fsPromises.readdir(path.join(__dirname, "download"));
-  var output = await Promise.all([
-    Promise.all(
-      pachongurlselecarray.map(e =>
-        获取rss订阅内容(e.url, e.selector, e.imglazyattr)
-      )
-    ),
+    /* 先删除旧的json文件吧 */
+    const oldfiles = await fsPromises.readdir(path.join(__dirname, "download"));
+    var output = await Promise.all([
+        Promise.all(
+            pachongurlselecarray.map(e =>
+                获取rss订阅内容(e.url, e.selector, e.imglazyattr)
+            )
+        ),
 
-    Promise.all(
-      oldfiles.map(f => {
-        return fsPromises.unlink(path.join(__dirname, "download", f));
-      })
-    )
-  ]);
+        Promise.all(
+            oldfiles.map(f => {
+                return fsPromises.unlink(path.join(__dirname, "download", f));
+            })
+        )
+    ]);
 
-  console.log("爬虫全部完成!\n");
-  console.log(JSON.stringify(output[0]));
-  const filepath = path.join(
-    __dirname,
-    "download",
-    `download ${new Date()}.log.json`
-      .replace(/\"/g, "_")
-      .replace(/\|/g, "_")
-      .replace(/:/g, "_")
-      .replace(/\\/g, "_")
-      .replace(/\//g, "_")
-      .replace(/\ /g, "_")
-  );
-  try {
-    await fsPromises.writeFile(filepath, JSON.stringify(output[0]));
-  } catch (error) {
-    console.error(error);
-  }
-
-  //  );
-})();
-async function sleeptiemout(timems) {
-  return await new Promise(rs => {
-    setTimeout(() => {
-      rs();
-    }, timems);
-  });
-}
-async function 获取rss订阅内容(feedrssurl, selector, imglazyattr) {
-  return await new Promise(async (rs, rj) => {
-    console.log("爬虫测试开始", feedrssurl);
-
-    fetch.fetchUrl(feedrssurl, urloptions, async (error, meta, body) => {
-      if (error) {
-        rj(new Error(error));
-        return;
-      }
-      if (typeof meta.status !== `undefined` && meta.status !== 200) {
-        /* TypeError: Cannot read property 'status' of undefined */
-        // console.error
-        rj(
-          new Error(
-            "爬虫下载失败,重新下载-" + feedrssurl + "错误码" + meta.status
-          )
-        );
-        return;
-      }
-      const htmltext = body.toString();
-      //   console.log(htmltext);
-      const jsondata = fastxmlparser.parse(htmltext);
-      const websitetitle = jsondata.rss.channel.title;
-
-      const rssfilepath = path.join(
+    console.log("爬虫全部完成!\n");
+    console.log(JSON.stringify(output[0]));
+    const filepath = path.join(
         __dirname,
         "download",
-        (websitetitle + "-" + feedrssurl + "-" + filecreatetime + ".json")
-          .replace(/\"/g, "_")
-          .replace(/\|/g, "_")
-          .replace(/:/g, "_")
-          .replace(/\\/g, "_")
-          .replace(/\//g, "_")
-          .replace(/\ /g, "_")
-      );
-      fs.writeFile(rssfilepath, JSON.stringify(jsondata), e => {
-        if (e) {
-          rj(new Error(e));
-        }
-      });
-      //   console.log(jsondata.rss.channel.item);
-      const resultoutput = jsondata.rss.channel.item.map(eleobj => {
-        return {
-          title: eleobj.title,
-          link: eleobj.link
-        };
-      });
+        `download ${new Date()}.log.json`
+            .replace(/\"/g, "_")
+            .replace(/\|/g, "_")
+            .replace(/:/g, "_")
+            .replace(/\\/g, "_")
+            .replace(/\//g, "_")
+            .replace(/\ /g, "_")
+    );
+    try {
+        await fsPromises.writeFile(filepath, JSON.stringify(output[0]));
+    } catch (error) {
+        console.error(error);
+    }
 
-      // console.log(resultoutput);
-      //   console.log(meta);
-      var filelists = await Promise.all(
-        resultoutput.map(e =>
-          爬虫下载解析(e.link, selector, imglazyattr, websitetitle)
-        )
-      );
-      rs(
-        ["爬虫完成! ", feedrssurl, filelists]
-        // + feedrssurl + " " + JSON.stringify(filelists)
-      );
+    //  );
+})();
+async function sleeptiemout(timems) {
+    return await new Promise(rs => {
+        setTimeout(() => {
+            rs();
+        }, timems);
     });
-  });
+}
+async function 获取rss订阅内容(feedrssurl, selector, imglazyattr) {
+    return await new Promise(async (rs, rj) => {
+        console.log("爬虫测试开始", feedrssurl);
+
+        fetch.fetchUrl(feedrssurl, urloptions, async (error, meta, body) => {
+            if (error) {
+                rj(new Error(error));
+                return;
+            }
+            if (typeof meta.status !== `undefined` && meta.status !== 200) {
+                /* TypeError: Cannot read property 'status' of undefined */
+                // console.error
+                rj(
+                    new Error(
+                        "爬虫下载失败,重新下载-" +
+                            feedrssurl +
+                            "错误码" +
+                            meta.status
+                    )
+                );
+                return;
+            }
+            const htmltext = body.toString();
+            //   console.log(htmltext);
+            const jsondata = fastxmlparser.parse(htmltext);
+            const websitetitle = jsondata.rss.channel.title;
+
+            const rssfilepath = path.join(
+                __dirname,
+                "download",
+                (
+                    websitetitle +
+                    "-" +
+                    feedrssurl +
+                    "-" +
+                    filecreatetime +
+                    ".json"
+                )
+                    .replace(/\"/g, "_")
+                    .replace(/\|/g, "_")
+                    .replace(/:/g, "_")
+                    .replace(/\\/g, "_")
+                    .replace(/\//g, "_")
+                    .replace(/\ /g, "_")
+            );
+            fs.writeFile(rssfilepath, JSON.stringify(jsondata), e => {
+                if (e) {
+                    rj(new Error(e));
+                }
+            });
+            //   console.log(jsondata.rss.channel.item);
+            const resultoutput = jsondata.rss.channel.item.map(eleobj => {
+                return {
+                    title: eleobj.title,
+                    link: eleobj.link
+                };
+            });
+
+            // console.log(resultoutput);
+            //   console.log(meta);
+            var filelists = await Promise.all(
+                resultoutput.map(e =>
+                    爬虫下载解析(e.link, selector, imglazyattr, websitetitle)
+                )
+            );
+            rs(
+                ["爬虫完成! ", feedrssurl, filelists]
+                // + feedrssurl + " " + JSON.stringify(filelists)
+            );
+        });
+    });
 }
 async function 若失败反复尝试下载(url) {
-  var elinkurl = url;
-  return await new Promise(async rs => {
-    console.log("爬虫开始下载", elinkurl);
-    fetch.fetchUrl(elinkurl, urloptions, async (error, meta, body) => {
-      try {
-        if (error) throw new Error(error);
+    var elinkurl = url;
+    return await new Promise(async rs => {
+        console.log("爬虫开始下载", elinkurl);
+        fetch.fetchUrl(elinkurl, urloptions, async (error, meta, body) => {
+            try {
+                if (error) throw new Error(error);
 
-        if (typeof meta.status !== `undefined` && meta.status !== 200) {
-          /* TypeError: Cannot read property 'status' of undefined */
-          //   console.log("爬虫下载失败", elinkurl);
-          throw new Error("爬虫下载失败" + " 错误码 " + meta.status);
+                if (typeof meta.status !== `undefined` && meta.status !== 200) {
+                    /* TypeError: Cannot read property 'status' of undefined */
+                    //   console.log("爬虫下载失败", elinkurl);
+                    throw new Error("爬虫下载失败" + " 错误码 " + meta.status);
 
-          //   return;
-        }
+                    //   return;
+                }
 
-        rs(body);
-        return;
-      } catch (error) {
-        console.error("爬虫下载失败", elinkurl, error);
-        await sleeptiemout(500 + 500 * Math.random());
+                rs(body);
+                return;
+            } catch (error) {
+                console.error("爬虫下载失败", elinkurl, error);
+                await sleeptiemout(500 + 500 * Math.random());
 
-        rs(await 若失败反复尝试下载(url));
-      }
+                rs(await 若失败反复尝试下载(url));
+            }
+        });
     });
-  });
 }
 
 async function 爬虫下载解析(
-  elinkurl,
-  contentselector,
-  imglazyattr,
-  websitetitle
+    elinkurl,
+    contentselector,
+    imglazyattr,
+    websitetitle
 ) {
-  await sleeptiemout(100 * Math.random());
-  return await new Promise(async (rs, rj) => {
-    const selector = contentselector;
-    // setTimeout(() => {
+    await sleeptiemout(100 * Math.random());
+    return await new Promise(async (rs, rj) => {
+        const selector = contentselector;
+        // setTimeout(() => {
 
-    var body = await new Promise(async (resolve, reject) => {
-      resolve(await 若失败反复尝试下载(elinkurl));
+        var body = await new Promise(async (resolve, reject) => {
+            resolve(await 若失败反复尝试下载(elinkurl));
+        });
+
+        const $ = cheerio.load(body.toString());
+        const imgs = Array.from($(selector + " img")).map(
+            e => {
+                //   console.log(e);
+                return e.attribs[imglazyattr] || e.attribs["src"];
+            }
+            //   $(e).attr('data-original')
+        );
+        const title = $("title").text();
+        const contenttext = $(contentselector).text();
+        const filetextobj = { title, link: elinkurl, contenttext };
+        //   console.log(filetextobj);
+        const filepath = path.join(
+            __dirname,
+            "download",
+            (websitetitle + "-" + title + "-" + filecreatetime + ".json")
+                .replace(/\"/g, "_")
+                .replace(/\ /g, "_")
+                .replace(/:/g, "_")
+                .replace(/\\/g, "_")
+                .replace(/\//g, "_")
+                .replace(/\|/g, "_")
+        );
+        const writetext = {
+            title: filetextobj.title,
+
+            link: filetextobj.link,
+            //   meta,
+            imgs,
+            text: filetextobj.contenttext
+        };
+
+        /* 判断文件目录是否存在 */
+        if (!fs.existsSync(path.join(__dirname, "download"))) {
+            console.log(
+                "所需的目录不存在,创建目录",
+                path.join(__dirname, "download")
+            );
+            fs.mkdirSync(path.join(__dirname, "download"));
+        }
+        console.log("写入到文件", filepath, writetext);
+        rs(["文件写入成功!", elinkurl, filepath]);
+        //   console.log("./download/" + title + new Date().getTime() + ".json");
+        // try {
+        //     await fsPromises.writeFile(filepath, JSON.stringify(writetext));
+        //     rs(["文件写入成功!", elinkurl, filepath]);
+        // } catch (error) {
+        //     rj(new Error(error));
+        // }
+
+        // fs.writeFile(
+        //   filepath,
+        //   //   "./download/" + title + new Date().getTime() + ".json",
+        //   JSON.stringify(writetext),
+        //   // JSON.stringify(meta) +
+        //   //   "\n" +
+        //   //   //   body.toString() +
+        //   //   "\n" +
+        //   //   JSON.stringify(filetextobj),
+        //   e => {
+        //     if (e) {
+        //       rj(new Error(e));
+        //     }
+        //   }
+        // );
     });
 
-    const $ = cheerio.load(body.toString());
-    const imgs = Array.from($(selector + " img")).map(
-      e => {
-        //   console.log(e);
-        return e.attribs[imglazyattr] || e.attribs["src"];
-      }
-      //   $(e).attr('data-original')
-    );
-    const title = $("title").text();
-    const contenttext = $(contentselector).text();
-    const filetextobj = { title, link: elinkurl, contenttext };
-    //   console.log(filetextobj);
-    const filepath = path.join(
-      __dirname,
-      "download",
-      (websitetitle + "-" + title + "-" + filecreatetime + ".json")
-        .replace(/\"/g, "_")
-        .replace(/\ /g, "_")
-        .replace(/:/g, "_")
-        .replace(/\\/g, "_")
-        .replace(/\//g, "_")
-        .replace(/\|/g, "_")
-    );
-    const writetext = {
-      title: filetextobj.title,
-
-      link: filetextobj.link,
-      //   meta,
-      imgs,
-      text: filetextobj.contenttext
-    };
-
-    /* 判断文件目录是否存在 */
-    if (!fs.existsSync(path.join(__dirname, "download"))) {
-      console.log(
-        "所需的目录不存在,创建目录",
-        path.join(__dirname, "download")
-      );
-      fs.mkdirSync(path.join(__dirname, "download"));
-    }
-    console.log("写入到文件", filepath, writetext);
-    //   console.log("./download/" + title + new Date().getTime() + ".json");
-    try {
-      await fsPromises.writeFile(filepath, JSON.stringify(writetext));
-      rs(["文件写入成功!", elinkurl, filepath]);
-    } catch (error) {
-      rj(new Error(error));
-    }
-
-    // fs.writeFile(
-    //   filepath,
-    //   //   "./download/" + title + new Date().getTime() + ".json",
-    //   JSON.stringify(writetext),
-    //   // JSON.stringify(meta) +
-    //   //   "\n" +
-    //   //   //   body.toString() +
-    //   //   "\n" +
-    //   //   JSON.stringify(filetextobj),
-    //   e => {
-    //     if (e) {
-    //       rj(new Error(e));
-    //     }
-    //   }
-    // );
-  });
-
-  // }, 100 * Math.random());
-  //   });
+    // }, 100 * Math.random());
+    //   });
 }
 
 /* 获取懒加载的图片的网址 */
