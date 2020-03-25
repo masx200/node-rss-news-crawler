@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@types/check-types@^7.3.1":
+  version "7.3.1"
+  resolved "https://registry.npmjs.org/@types/check-types/-/check-types-7.3.1.tgz#81c2eb6b9866655b149a5eb490a758266b841eb6"
+  integrity sha512-ngdPEVdU7HMFoDWBibpBB2T59WKhn832O19s1xWhbbPVC/FoMJSetj/8V68p6L28oeU2wPSVfeP4GX0AmxLKUw==
+
 "@types/node-fetch@^2.5.5":
   version "2.5.5"
   resolved "https://registry.npmjs.org/@types/node-fetch/-/node-fetch-2.5.5.tgz#cd264e20a81f4600a6c52864d38e7fef72485e92"
