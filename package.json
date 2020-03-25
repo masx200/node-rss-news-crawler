@@ -2,7 +2,7 @@
     "type": "commonjs",
     "dependencies": {},
     "name": "nodejs_pachong_test",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "main": "index.js",
     "devDependencies": {
         "@types/check-types": "^7.3.1",
