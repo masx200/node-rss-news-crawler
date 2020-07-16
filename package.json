@@ -1,6 +1,11 @@
 {
     "type": "commonjs",
-    "dependencies": {},
+    "dependencies": {
+    
+        "lodash":"4.17.19"
+    
+    
+    },
     "name": "node-rss-news-crawler",
     "version": "1.1.0",
     "main": "index.js",
