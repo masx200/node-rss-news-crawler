@@ -1,7 +1,7 @@
 {
     "type": "commonjs",
     "dependencies": {},
-    "name": "nodejs_pachong_test",
+    "name": "node-rss-news-crawler",
     "version": "1.1.0",
     "main": "index.js",
     "devDependencies": {
