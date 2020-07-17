@@ -1,4 +1,4 @@
-# nodejs_pachong_test
+# node-rss-news-crawler
 
 使用 javascript 写的 nodejs 爬虫,从 rss 订阅上下载 xml,转换成 json,然后提取里面的每一个订阅项目的 url,并爬取正文内容和图片的网址
 
