@@ -44,7 +44,7 @@ cheerio@^1.0.0-rc.3:
     dom-serializer "~0.1.1"
     entities "~1.1.1"
     htmlparser2 "^3.9.1"
-    lodash "^4.15.0"
+    lodash "^4.17.19"
     parse5 "^3.0.1"
 
 combined-stream@^1.0.8:
@@ -197,7 +197,7 @@ isobject@^3.0.1:
   resolved "https://registry.npmjs.org/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
   integrity sha1-TkMekrEalzFjaqH5yNHMvP2reN8=
 
-lodash@^4.15.0:
+lodash@^4.17.19:
   version "4.17.19"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
   integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
